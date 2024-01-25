@@ -15,7 +15,7 @@ const RegisterUserSchema = Joi.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     )
     .required(),
-  isVerified: Joi.boolean().optional(),
+  otp: Joi.string().required(),
   createAt: Joi.date().default(Date.now),
   lastUpdateAt: Joi.date().default(Date.now),
 });

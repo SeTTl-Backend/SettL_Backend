@@ -8,14 +8,17 @@ const UserSchema = new Schema({
   firstName: {
     type: String,
     required: true,
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
+    trim: true,
   },
   email: {
     type: String,
     required: true,
+    trim: true,
   },
   phoneNumber: {
     type: Number,
@@ -29,8 +32,9 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  isVerified: {
-    type: Boolean,
+  otp: {
+    type: String,
+    required: false,
   },
   createAt: {
     type: Date,
