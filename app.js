@@ -2,13 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const cors = require("cors");
 
 const connectToDb = require("./db/mongodb");
 const CONFIG = require("./config/config");
 const logger = require("./logging/logger");
-const userRouter = require("./domains/user");
-const forgotPasswordRouter = require("./domains/forgot_password");
-const otpRouter = require("./domains/otp-verification");
+const routes = require("./routes");
 
 const app = express();
 
@@ -31,9 +30,30 @@ app.use(limiter);
 //security middleware
 app.use(helmet());
 
-app.use("/api/v1", userRouter);
-app.use("/api/v1/", forgotPasswordRouter);
-app.use("/api/v1/", otpRouter);
+//allow origins
+const allowedOrigins = [
+  "http://localhost:5000",
+  "https://localhost:5000",
+  "http://localhost:3000",
+  "https://localhost:3000",
+  "http://accessify.netlify.app",
+  "https://accessify.netlify.app",
+  "*",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+
+app.use(routes);
 
 app.get("/", (req, res) => {
   res.send("Hello SettL");
