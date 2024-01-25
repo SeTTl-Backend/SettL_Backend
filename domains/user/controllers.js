@@ -61,6 +61,8 @@ async function registerUser(req, res) {
 
     const createdUser = await newUser.save();
 
+    // TO DO: send a welcome mail notification to the user
+
     res.status(201).send({
       data: createdUser,
       status: 201,
@@ -99,6 +101,8 @@ async function authenticateUser(req, res) {
     const token = jwt.sign({ userId: fetchedUserId }, "your-secret-key", {
       expiresIn: "1h",
     });
+
+    // TO DO: send a sign in alert mail notification to the user
 
     res.status(200).send({
       data: fetchedUser,
