@@ -18,8 +18,8 @@ connectToDb();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Enable the 'trust proxy' setting to trust the 'X-Forwarded-For' header
-app.set("trust proxy", true);
+// Only trust the X-Forwarded-For header from your reverse proxy
+app.set("trust proxy", "loopback");
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
