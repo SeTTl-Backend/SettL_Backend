@@ -22,11 +22,11 @@ const UserSchema = new Schema({
   },
   phoneNumber: {
     type: Number,
-    required: true,
+    required: false,
   },
   dob: {
     type: Date,
-    required: true,
+    required: false,
   },
   password: {
     type: String,
