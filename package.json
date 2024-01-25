@@ -4,6 +4,7 @@
   "description": "Settl is a financial arrangement where a third party known as an escrow agent holds, and  regulates payment of funds required for two parties involved in the Transaction",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
