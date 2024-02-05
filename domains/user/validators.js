@@ -22,12 +22,7 @@ const RegisterUserSchema = Joi.object({
 
 const AuthenticateUserSchema = Joi.object({
   email: Joi.string().email().trim().required(),
-  password: Joi.string()
-    .min(8)
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    )
-    .required(),
+  password: Joi.string().required(),
 });
 
 async function RegisterUserValidationMW(req, res, next) {

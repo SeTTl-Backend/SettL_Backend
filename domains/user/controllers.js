@@ -104,7 +104,7 @@ async function authenticateUser(req, res) {
 
     // TO DO: send a sign in alert mail notification to the user
 
-    res.status(200).send({
+    res.status(200).json({
       data: fetchedUser,
       token: token,
       message: "Signed in successfully",

@@ -6,7 +6,7 @@ const forgotPasswordRouter = require("../domains/forgot_password");
 const otpRouter = require("../domains/otp-verification");
 
 router.use("/api/v1", userRouter);
-router.use("/api/v1/", forgotPasswordRouter);
-router.use("/api/v1/", otpRouter);
+router.use("/api/v1", forgotPasswordRouter);
+router.use("/api/v1", otpRouter);
 
 module.exports = router;
