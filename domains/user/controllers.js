@@ -10,15 +10,17 @@ function getAllUsers(req, res) {
   userModel
     .find()
     .then((users) => {
-      res.send({
-        data: users,
+      res.json({
+        data: {
+          users: users,
+        },
         status: 200,
         message: "Users fetched successfully",
       });
     })
     .catch((err) => {
       console.log(err);
-      res.send(err);
+      res.status(500).json(err);
     });
 }
 
@@ -31,7 +33,7 @@ async function registerUser(req, res) {
     const existingUser = await userModel.find({ email });
 
     if (existingUser.length) {
-      return res.status(400).send({
+      return res.send({
         status: 400,
         message: "User with the provided email already exists",
       });
@@ -41,7 +43,7 @@ async function registerUser(req, res) {
       .sort({ createdAt: -1 })
       .limit(1);
     if (otpResponse.length === 0 || otp !== otpResponse[0].otp) {
-      return res.status(400).send({
+      return res.send({
         status: 400,
         message: "The OTP is not valid",
       });
@@ -63,7 +65,7 @@ async function registerUser(req, res) {
 
     // TO DO: send a welcome mail notification to the user
 
-    res.status(201).send({
+    res.send({
       data: createdUser,
       status: 201,
       message: "User created successfully",
@@ -82,7 +84,7 @@ async function authenticateUser(req, res) {
   try {
     const fetchedUser = await userModel.find({ email });
     if (!fetchedUser?.length) {
-      return res.status(401).json({
+      return res.json({
         message: "Invalid credentials entered",
         status: 401,
       });
@@ -92,7 +94,7 @@ async function authenticateUser(req, res) {
     const passwordMatch = await verifyHashedData(password, hashedPassword);
 
     if (!passwordMatch) {
-      return res.status(401).json({
+      return res.json({
         message: "Invalid password entered",
         status: 401,
       });
@@ -104,9 +106,11 @@ async function authenticateUser(req, res) {
 
     // TO DO: send a sign in alert mail notification to the user
 
-    res.status(200).json({
-      data: fetchedUser,
-      token: token,
+    res.json({
+      data: {
+        user: fetchedUser,
+        token: token,
+      },
       message: "Signed in successfully",
       status: 200,
     });
