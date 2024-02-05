@@ -10,7 +10,7 @@ async function requestPasswordReset(req, res) {
   try {
     const fetchedUser = await userModel.find({ email });
     if (!fetchedUser?.length) {
-      return res.status(401).json({
+      return res.json({
         message: "No account with the supplied email exist",
         status: 401,
       });
@@ -33,7 +33,7 @@ async function requestPasswordReset(req, res) {
 
     await newPasswordReset.save();
 
-    res.status(200).json({
+    res.json({
       message: "Reset password mail sent successfully",
       status: 200,
     });
@@ -55,7 +55,7 @@ async function passwordReset(req, res) {
       const hashedResetString = passwordReset[0].hashedResetString;
       if (expiredAt < Date.now()) {
         await PasswordReset.deleteOne({ userId });
-        return res.status(401).json({
+        return res.json({
           message: "Password reset link has expired",
           status: 401,
         });
@@ -67,7 +67,7 @@ async function passwordReset(req, res) {
       );
 
       if (!resetStringMatch) {
-        return res.status(401).json({
+        return res.json({
           message: "Invalid password reset details provided",
           status: 401,
         });
@@ -78,12 +78,12 @@ async function passwordReset(req, res) {
         { password: hashedNewPassword }
       );
       await ForgotPasswordModel.deleteOne({ userId });
-      res.status(200).json({
+      res.json({
         message: "Password updated successfully",
         status: 200,
       });
     } else {
-      res.status(401).json({
+      res.json({
         message: "Password reset request not found",
         status: 401,
       });

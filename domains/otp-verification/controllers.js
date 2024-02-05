@@ -11,7 +11,7 @@ async function sendOtp(req, res) {
     const checkUserPresent = await userModel.find({ email });
 
     if (checkUserPresent?.length) {
-      return res.status(401).json({
+      return res.json({
         message: "User already registered",
         status: 401,
       });
@@ -32,7 +32,7 @@ async function sendOtp(req, res) {
     const otpPayload = { email, otp };
     const otpBody = await OtpModel.create(otpPayload);
 
-    res.status(200).json({
+    res.json({
       status: 200,
       message: "OTP sent successfully",
     });
