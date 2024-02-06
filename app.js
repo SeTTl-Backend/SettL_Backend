@@ -39,8 +39,8 @@ const allowedOrigins = [
   "https://localhost:5000",
   "http://localhost:3000",
   "https://localhost:3000",
-  "http://accessify.netlify.app",
-  "https://accessify.netlify.app",
+  "https://settl-staging.netlify.app",
+  "http://settl-staging.netlify.app",
   "*",
 ];
 
