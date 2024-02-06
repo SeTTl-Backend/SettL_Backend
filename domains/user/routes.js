@@ -8,6 +8,11 @@ const {
 const userController = require("./controllers");
 
 userRouter.get("/users", VerifyTokenMW, userController.getAllUsers);
+useRouter.get(
+  "/getUserById/:userId",
+  VerifyTokenMW,
+  userController.getUserById
+);
 userRouter.post(
   "/register",
   RegisterUserValidationMW,

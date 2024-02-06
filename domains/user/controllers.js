@@ -123,8 +123,34 @@ async function authenticateUser(req, res) {
   }
 }
 
+async function getUserById(req, res) {
+  try {
+    const userId = req.params.userId;
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: "User not found",
+      });
+    }
+
+    return res.json({
+      status: 200,
+      message: "User fetched successfully",
+      data: user,
+    });
+  } catch (err) {
+    res.json({
+      status: 500,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   getAllUsers,
   registerUser,
   authenticateUser,
+  getUserById,
 };
