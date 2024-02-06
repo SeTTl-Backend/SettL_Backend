@@ -8,7 +8,7 @@ const {
 const userController = require("./controllers");
 
 userRouter.get("/users", VerifyTokenMW, userController.getAllUsers);
-useRouter.get(
+userRouter.get(
   "/getUserById/:userId",
   VerifyTokenMW,
   userController.getUserById
