@@ -16,12 +16,27 @@ async function sendOtp(req, res) {
         status: 401,
       });
     }
+
+    // Check if there's an existing OTP and it hasn't expired
+    const existingOtp = await OtpModel.findOne({ email });
+    if (
+      existingOtp &&
+      existingOtp.createAt.getTime() + 5 * 60 * 1000 > Date.now()
+    ) {
+      // OTP is still valid
+      return res.json({
+        message: "OTP is still valid. Please check your email.",
+        status: 400,
+      });
+    }
+
     let otp = otpGenerator.generate(4, {
       upperCaseAlphabets: false,
       lowerCaseAlphabets: false,
       specialChars: false,
     });
     let result = await OtpModel.findOne({ otp: otp });
+
     while (result) {
       otp = otpGenerator.generate(4, {
         upperCaseAlphabets: false,

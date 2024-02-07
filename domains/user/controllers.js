@@ -33,7 +33,7 @@ async function registerUser(req, res) {
     const existingUser = await userModel.find({ email });
 
     if (existingUser.length) {
-      return res.send({
+      return res.json({
         status: 400,
         message: "User with the provided email already exists",
       });
@@ -43,7 +43,7 @@ async function registerUser(req, res) {
       .sort({ createdAt: -1 })
       .limit(1);
     if (otpResponse.length === 0 || otp !== otpResponse[0].otp) {
-      return res.send({
+      return res.json({
         status: 400,
         message: "The OTP is not valid",
       });
@@ -65,7 +65,7 @@ async function registerUser(req, res) {
 
     // TO DO: send a welcome mail notification to the user
 
-    res.send({
+    res.json({
       data: createdUser,
       status: 201,
       message: "User created successfully",
