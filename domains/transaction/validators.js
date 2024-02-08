@@ -3,9 +3,7 @@ const Joi = require("joi");
 const TransactionSchema = Joi.object({
   reference: Joi.string().required().trim(),
   userId: Joi.string().required().trim(),
-  status: Joi.string().optional.trim(),
   formData: Joi.object({
-    role: Joi.string().valid("buyer", "seller").trim().optional(),
     transactionType: Joi.string().trim().required(),
     amount: Joi.string().trim().required(),
     deliveryAddress: Joi.string().trim().required(),

@@ -6,7 +6,8 @@ const transactionController = require("./controllers");
 
 transactionRouter.post(
   "/create-transaction",
-  VerifyTokenMW,
   createTransactionValidationMW,
   transactionController.createTransaction
 );
+
+module.exports = transactionRouter;
