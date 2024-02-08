@@ -20,12 +20,19 @@ async function createTransaction(req, res) {
       },
     };
 
-    const existingUser = await userModel.find({
+    const existingSeller = await userModel.find({
       email: formData?.counterpartyEmail,
     });
-    if (!existingUser?.length) {
+    if (!existingSeller?.length) {
       return res.json({
         message: "Seller must be registered with us",
+        status: 401,
+      });
+    }
+
+    if (existingSeller?.role?.toLowerCase() === "buyer") {
+      return res.json({
+        message: "Counter party is not a buyer",
         status: 401,
       });
     }
