@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const TransactionSchema = Joi.object({
   reference: Joi.string().required().trim(),
-  userId: Joi.string().required().trim(),
+  buyerId: Joi.string().required().trim(),
   formData: Joi.object({
     transactionType: Joi.string().trim().required(),
     amount: Joi.string().trim().required(),
