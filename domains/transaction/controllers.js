@@ -7,7 +7,7 @@ const userModel = require("../user/model");
 const httpsRequest = util.promisify(https.request);
 
 async function createTransaction(req, res) {
-  const { reference, userId, formData } = req.body;
+  const { reference, buyerId, formData } = req.body;
   const status = req.body;
   try {
     const options = {
@@ -61,7 +61,7 @@ async function createTransaction(req, res) {
           reference,
           status,
           sellerId: existingUser?._id,
-          buyerId: userId,
+          buyerId: buyerId,
           formData,
         });
 
