@@ -16,7 +16,8 @@ async function createTransaction(req, res) {
       path: `/transaction/verify/${reference}`,
       method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_PUBLIC_KEY}`,
+        Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_SECRETE_KEY}`,
+        "Content-Type": "application/json",
       },
     };
 
