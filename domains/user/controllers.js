@@ -28,6 +28,7 @@ async function registerUser(req, res) {
   const user = req.body;
   const email = user.email;
   const password = user.password;
+  const role = user.role;
   const otp = user.otp;
   try {
     const existingUser = await userModel.find({ email });
@@ -55,9 +56,8 @@ async function registerUser(req, res) {
     const newUser = new userModel({
       firstName: user.firstName,
       lastName: user.lastName,
-      dob: user.dob,
       email: email,
-      phoneNumber: user.phoneNumber,
+      role: role,
       password: hashedPassword,
     });
 

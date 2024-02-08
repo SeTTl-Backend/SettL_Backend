@@ -20,12 +20,12 @@ const UserSchema = new Schema({
     required: true,
     trim: true,
   },
-  phoneNumber: {
-    type: Number,
-    required: false,
+  role: {
+    type: String,
+    required: true,
   },
-  dob: {
-    type: Date,
+  walletDetails: {
+    type: String,
     required: false,
   },
   password: {

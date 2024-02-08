@@ -3,12 +3,8 @@ const Joi = require("joi");
 const RegisterUserSchema = Joi.object({
   firstName: Joi.string().max(255).trim().required(),
   lastName: Joi.string().max(255).required().trim(),
-  dob: Joi.date().greater("1-1-1900").less("1-1-2022").optional(),
   email: Joi.string().email().trim().required(),
-  phoneNumber: Joi.string()
-    .trim()
-    .pattern(/^[0-9]{11}$/)
-    .optional(),
+  role: Joi.string().trim().required(),
   password: Joi.string()
     .min(8)
     .regex(
