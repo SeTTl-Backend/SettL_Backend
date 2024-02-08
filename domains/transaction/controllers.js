@@ -20,6 +20,16 @@ async function createTransaction(req, res) {
       },
     };
 
+    const existingUser = await userModel.find({
+      email: formData?.counterpartyEmail,
+    });
+    if (!existingUser?.length) {
+      return res.json({
+        message: "Seller must be registered with us",
+        status: 401,
+      });
+    }
+
     const apiRes = await httpsRequest(options);
     let data = "";
 
@@ -28,16 +38,7 @@ async function createTransaction(req, res) {
     });
 
     apiRes.on("end", async () => {
-      const existingUser = await userModel.find({
-        email: formData?.counterpartyEmail,
-      });
-      if (!existingUser?.length) {
-        return res.json({
-          message: "Seller must be registered with us",
-          status: 401,
-        });
-      }
-      if (existingUser?.role?.toLowercase() === "buyer") {
+      if (existingUser?.role?.toLowerCase() === "buyer") {
         await userModel.updateOne(
           { _id: existingUser?._id },
           {
