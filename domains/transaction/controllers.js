@@ -98,7 +98,6 @@ async function verifyTransaction(req, res) {
   let { transactionId, action } = req.body;
   try {
     const transaction = await transactionModel.find({ _id: transactionId });
-    console.log(transaction, "tt");
     if (transaction?.length > 0) {
       const { status, sellerId, buyerId, formData } = transaction[0];
 
