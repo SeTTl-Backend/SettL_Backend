@@ -1,26 +1,13 @@
 require("dotenv").config();
-const https = require("https");
-const util = require("util");
+const axios = require("axios");
 const transactionModel = require("./model");
 const userModel = require("../user/model");
 
-const httpsRequest = util.promisify(https.request);
-
 async function createTransaction(req, res) {
   const { reference, buyerId, formData } = req.body;
-  const status = req.body;
-  try {
-    const options = {
-      hostname: "api.paystack.co",
-      port: 443,
-      path: `/transaction/verify/${reference}`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_SECRETE_KEY}`,
-        "Content-Type": "application/json",
-      },
-    };
+  let status = req.body; // Make sure to use let instead of const
 
+  try {
     const existingSeller = await userModel.find({
       email: formData?.counterpartyEmail,
     });
@@ -32,70 +19,55 @@ async function createTransaction(req, res) {
     }
 
     if (existingSeller?.role?.toLowerCase() === "buyer") {
-      return res.json({
-        message: "Counter party is not a buyer",
-        status: 401,
-      });
+      return res.json({ message: "Counterparty is not a seller", status: 401 });
     }
 
-    const apiRes = await httpsRequest(options);
-    let data = "";
-
-    apiRes.on("data", (chunk) => {
-      data += chunk;
-    });
-
-    apiRes.on("end", async () => {
-      if (existingUser?.role?.toLowerCase() === "buyer") {
-        await userModel.updateOne(
-          { _id: existingUser?._id },
-          {
-            walletDetails:
-              Number(existingUser?.walletDetails) + Number(formData?.amount),
-          }
-        );
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_SECRETE_KEY}`,
+          "Content-Type": "application/json",
+        },
       }
-      status = "PENDING";
-      try {
-        const newTransaction = new transactionModel({
-          reference,
-          status,
-          sellerId: existingUser?._id,
-          buyerId: buyerId,
-          formData,
-        });
+    );
 
-        const createdTransaction = await newTransaction.save();
-        res.json({
-          status: 201,
-          message: "Transaction created successfully",
-          data,
-        });
-      } catch (error) {
-        res.status(500).json({
-          status: 500,
-          message:
-            error.message || "An error occurred while saving the transaction",
-        });
-      }
+    const data = response.data;
+
+    // Perform actions based on response data or seller/buyer roles
+    if (existingUser?.role?.toLowerCase() === "buyer") {
+      await userModel.updateOne(
+        { _id: existingUser?._id },
+        {
+          walletDetails:
+            Number(existingUser?.walletDetails) + Number(formData?.amount),
+        }
+      );
+    }
+
+    status = "PENDING";
+
+    const newTransaction = new transactionModel({
+      reference,
+      status,
+      sellerId: existingUser?._id,
+      buyerId: buyerId,
+      formData,
     });
 
-    apiRes.on("error", (error) => {
-      res.status(500).json({
-        status: 500,
-        message:
-          error.message ||
-          "An error occurred while fetching data from Paystack API",
-      });
-    });
-  } catch (err) {
+    const createdTransaction = await newTransaction.save();
+
     res.json({
-      status: 500,
-      message: err.message || "An Error occurred",
+      status: 201,
+      message: "Transaction created successfully",
+      data,
     });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ status: 500, message: error.message || "An error occurred" });
   }
 }
-
 module.exports = {
   createTransaction,
 };
