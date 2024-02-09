@@ -108,15 +108,23 @@ async function verifyTransaction(req, res) {
         });
       }
 
+      console.log("got here 1");
+
       //fetch buyer
-      const fetchedBuyerUser = await userModel.find({ _id: buyerId });
-      const fetchedSellerUser = await userModel.find({ _id: sellerId });
+      const fetchedBuyerUser = await userModel.find({
+        _id: buyerId.replace(/"/g, ""),
+      });
+      const fetchedSellerUser = await userModel.find({
+        _id: sellerId.replace(/"/g, ""),
+      });
       if (!fetchedBuyerUser?.length || !fetchedSellerUser?.length) {
         return res.json({
           message: "Invalid credentials requested",
           status: 401,
         });
       }
+
+      console.log("got here 2");
 
       if (action === "decline") {
         await transactionModel.updateOne(

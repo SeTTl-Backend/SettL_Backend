@@ -23,8 +23,8 @@ const TransactionSchema = Joi.object({
 });
 
 const VerifyTransactionSchema = Joi.object({
-  transactionId: Joi.string().max(255).trim().required(),
-  action: Joi.string().max(255).trim().required(),
+  transactionId: Joi.string().trim().required(),
+  action: Joi.string().trim().required(),
 });
 
 async function createTransactionValidationMW(req, res, next) {
