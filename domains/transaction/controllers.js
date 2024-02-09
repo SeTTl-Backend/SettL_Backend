@@ -103,7 +103,7 @@ async function verifyTransaction(req, res) {
 
       if (status !== "PENDING") {
         return res.json({
-          message: "Transaction already in processed",
+          message: "Transaction already processed",
           status: 401,
         });
       }
