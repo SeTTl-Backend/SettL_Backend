@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const sendEmail = require("../../utils/sendEmail");
 
 //Define a schema
 const Schema = mongoose.Schema;
@@ -37,6 +38,10 @@ const TransactionSchema = new Schema({
     setConditions: { type: String },
     termsAndConditions: { type: Boolean, default: false },
   },
+  redirectUrl: {
+    type: String,
+    required: true,
+  },
   createAt: {
     type: Date,
     default: Date.now,
@@ -48,7 +53,7 @@ const TransactionSchema = new Schema({
 });
 
 //Define a function to send  email to the seller
-async function sendAcceptanceEmail(formData) {
+async function sendAcceptanceEmail(formData, redirectUrl, id) {
   try {
     const mailOptions = {
       from: process.env.AUTH_EMAIL,
@@ -62,22 +67,23 @@ async function sendAcceptanceEmail(formData) {
         <li><strong>Amount:</strong> ${formData.amount}</li>
         <li><strong>Delivery Address:</strong> ${formData.deliveryAddress}</li>
       </ul>
-      <p>To confirm the transaction, click <a href="https://localhost:3000/confirm-transaction?action=accept">here</a>.</p>
-      <p>To decline the transaction, click <a href="https://localhost:3000/confirm-transaction?action=decline">here</a>.</p>`,
+      <p>To confirm the transaction, click <a href="${redirectUrl}?transactionId=${id}&action=accept" target="_blank">here</a>.</p>
+      <p>To decline the transaction, click <a href="${redirectUrl}?transactionId=${id}&action=decline" target="_blank">here</a>.</p>
+      `,
     };
     await sendEmail(mailOptions);
   } catch (err) {
-    console.log("Error occurred while sending otp verification email");
+    console.log("Error occurred while sending transaction acceptance email");
     throw err;
   }
 }
 
 //Define a function to send emails
-TransactionSchema.pre("save", async function (next) {
+https: TransactionSchema.pre("save", async function (next) {
   console.log("New document saved to the database");
   // Only send an email when a new document has been created.
   if (this.isNew) {
-    await sendAcceptanceEmail(this.formData);
+    await sendAcceptanceEmail(this.formData, this.redirectUrl, this._id);
   }
   next();
 });

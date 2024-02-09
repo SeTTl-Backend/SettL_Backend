@@ -25,7 +25,7 @@ const UserSchema = new Schema({
     required: true,
   },
   walletDetails: {
-    type: String,
+    type: Number,
     required: false,
   },
   password: {
