@@ -35,12 +35,12 @@ async function createTransaction(req, res) {
     const data = response.data;
 
     // Perform actions based on response data or seller/buyer roles
-    if (existingUser?.role?.toLowerCase() === "buyer") {
+    if (existingSeller?.role?.toLowerCase() === "buyer") {
       await userModel.updateOne(
         { _id: existingUser?._id },
         {
           walletDetails:
-            Number(existingUser?.walletDetails) + Number(formData?.amount),
+            Number(existingSeller?.walletDetails) + Number(formData?.amount),
         }
       );
     }
@@ -50,7 +50,7 @@ async function createTransaction(req, res) {
     const newTransaction = new transactionModel({
       reference,
       status,
-      sellerId: existingUser?._id,
+      sellerId: existingSeller?._id,
       buyerId: buyerId,
       formData,
     });
