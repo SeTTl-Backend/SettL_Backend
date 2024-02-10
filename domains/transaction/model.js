@@ -66,6 +66,8 @@ async function sendAcceptanceEmail(formData, redirectUrl, id) {
         <li><strong>Transaction Type:</strong> ${formData.transactionType}</li>
         <li><strong>Amount:</strong> ${formData.amount}</li>
         <li><strong>Delivery Address:</strong> ${formData.deliveryAddress}</li>
+        <li><strong>Terms:</strong> ${formData.termsAndConditions}</li>
+
       </ul>
       <p>To confirm the transaction, click <a href="${redirectUrl}?transactionId=${id}&action=accept" target="_blank">here</a>.</p>
       <p>To decline the transaction, click <a href="${redirectUrl}?transactionId=${id}&action=decline" target="_blank">here</a>.</p>
