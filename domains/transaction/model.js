@@ -36,7 +36,7 @@ const TransactionSchema = new Schema({
     counterpartyEmail: { type: String },
     counterpartyPhone: { type: String },
     setConditions: { type: String },
-    termsAndConditions: { type: Boolean, default: false },
+    termsAndConditions: { type: String },
   },
   redirectUrl: {
     type: String,
@@ -81,7 +81,7 @@ async function sendAcceptanceEmail(formData, redirectUrl, id) {
 }
 
 //Define a function to send emails
-https: TransactionSchema.pre("save", async function (next) {
+TransactionSchema.pre("save", async function (next) {
   console.log("New document saved to the database");
   // Only send an email when a new document has been created.
   if (this.isNew) {

@@ -15,7 +15,7 @@ const TransactionSchema = Joi.object({
       .trim()
       .required(),
     setConditions: Joi.string().trim().required(),
-    termsAndConditions: Joi.boolean().required(),
+    termsAndConditions: Joi.string().trim().required(),
   }),
   redirectUrl: Joi.string().max(255).trim().required(),
   createdAt: Joi.date().default(Date.now),
