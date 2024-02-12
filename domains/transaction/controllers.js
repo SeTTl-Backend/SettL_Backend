@@ -173,6 +173,8 @@ async function verifyTransaction(req, res) {
                   <li><strong>Transaction Type:</strong> ${formData.transactionType}</li>
                   <li><strong>Amount:</strong> ${formData.amount}</li>
                   <li><strong>Delivery Address:</strong> ${formData.deliveryAddress}</li>
+                  <li><strong>Terms:</strong> ${formData.termsAndConditions}</li>
+
                 </ul>
                 <p>Thank you for your participation. The transaction will proceed as planned.</p>     
               `;
