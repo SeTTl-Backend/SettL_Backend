@@ -40,7 +40,7 @@ const VerifyTransactionDetailsSchema = Joi.object({
       .trim()
       .required(),
     setConditions: Joi.string().trim().required(),
-    termsAndConditions: Joi.boolean().required(),
+    termsAndConditions: Joi.string().trim().required(),
   }),
   createdAt: Joi.date().default(Date.now),
   lastUpdatedAt: Joi.date().default(Date.now),
