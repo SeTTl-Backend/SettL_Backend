@@ -8,6 +8,7 @@ async function disputeTransaction(req, res) {
       transactionID: transactionID,
       reason: reason,
       description: description,
+      userId: userId,
       createdAt: Date.now(),
     });
 
