@@ -2,7 +2,7 @@ require("dotenv").config();
 const disputeTransactionModel = require("./model");
 
 async function disputeTransaction(req, res) {
-  let { transactionID, reason, description } = req.body;
+  let { transactionID, reason, description, userId } = req.body;
   try {
     const newdisputeRequest = new disputeTransactionModel({
       transactionID: transactionID,
