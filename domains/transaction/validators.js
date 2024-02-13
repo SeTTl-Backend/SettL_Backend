@@ -15,7 +15,7 @@ const TransactionSchema = Joi.object({
       .trim()
       .required(),
     setConditions: Joi.string().trim().required(),
-    termsAndConditions: Joi.boolean().required(),
+    termsAndConditions: Joi.string().trim().required(),
   }),
   redirectUrl: Joi.string().max(255).trim().required(),
   createdAt: Joi.date().default(Date.now),
@@ -25,6 +25,25 @@ const TransactionSchema = Joi.object({
 const VerifyTransactionSchema = Joi.object({
   transactionId: Joi.string().trim().required(),
   action: Joi.string().trim().required(),
+});
+
+const VerifyTransactionDetailsSchema = Joi.object({
+  formData: Joi.object({
+    transactionType: Joi.string().trim().required(),
+    amount: Joi.number().required(),
+    deliveryAddress: Joi.string().trim().required(),
+    productName: Joi.string().trim().required(),
+    counterpartyName: Joi.string().trim().required(),
+    counterpartyEmail: Joi.string().email().trim().required(),
+    counterpartyPhone: Joi.string()
+      .pattern(/^[0-9]{11}$/)
+      .trim()
+      .required(),
+    setConditions: Joi.string().trim().required(),
+    termsAndConditions: Joi.string().trim().required(),
+  }),
+  createdAt: Joi.date().default(Date.now),
+  lastUpdatedAt: Joi.date().default(Date.now),
 });
 
 async function createTransactionValidationMW(req, res, next) {
@@ -55,7 +74,24 @@ async function verifyTransactionMW(req, res, next) {
   }
 }
 
+async function verifyTransactionDetailsValidationMW(req, res, next) {
+  const verifyTransactionDetailsPayLoad = req.body;
+
+  try {
+    await VerifyTransactionDetailsSchema.validateAsync(
+      verifyTransactionDetailsPayLoad
+    );
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   createTransactionValidationMW,
   verifyTransactionMW,
+  verifyTransactionDetailsValidationMW,
 };

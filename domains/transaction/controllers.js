@@ -202,7 +202,36 @@ async function verifyTransaction(req, res) {
   }
 }
 
+async function verifyTransactionDetails(req, res) {
+  const { formData } = req.body;
+
+  try {
+    const existingSeller = await userModel.find({
+      email: formData?.counterpartyEmail,
+    });
+    if (!existingSeller?.length) {
+      return res.json({
+        message: "Seller must be registered with us",
+        status: 401,
+      });
+    }
+    if (existingSeller[0]?.role !== "seller") {
+      return res.json({ message: "Counterparty is not a seller", status: 401 });
+    }
+
+    res.json({
+      status: 200,
+      message: "Transaction details verified",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ status: 500, message: error.message || "An error occurred" });
+  }
+}
+
 module.exports = {
   createTransaction,
   verifyTransaction,
+  verifyTransactionDetails,
 };
