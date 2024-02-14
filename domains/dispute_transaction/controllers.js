@@ -1,11 +1,18 @@
 require("dotenv").config();
+const DisputeTransactionMW = require("./validators");
 const disputeTransactionModel = require("./model");
 
 async function disputeTransaction(req, res) {
-  let { transactionID, reason, description, userId } = req.body;
+  const { error } = DisputeTransactionMW.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  const { transactionId, reason, description, userId } = req.body;
   try {
     const newdisputeRequest = new disputeTransactionModel({
-      transactionID: transactionID,
+      transactionId: transactionId,
       reason: reason,
       description: description,
       userId: userId,
