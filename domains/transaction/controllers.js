@@ -108,8 +108,6 @@ async function verifyTransaction(req, res) {
         });
       }
 
-      console.log("got here 1");
-
       //fetch buyer
       const fetchedBuyerUser = await userModel.find({
         _id: buyerId.replace(/"/g, ""),
@@ -160,9 +158,11 @@ async function verifyTransaction(req, res) {
       await transactionModel.updateOne(
         { _id: transactionId },
         {
-          status: "APPROVED",
+          status: "VERIFIED",
         }
       );
+
+      // PENDING, DECLINE, REFUNDED, VERIFIED, RECEIVED, COMPLETED transaction status
 
       // send a mail
       approvedTransactionSubject = "Transaction Approved";

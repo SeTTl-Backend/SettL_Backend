@@ -4,6 +4,7 @@ const verifyHashedData = require("../../utils/verifyHashedData");
 
 // Models
 const userModel = require("./model");
+const transactionModel = require("../transaction/model");
 const OtpModel = require("../otp-verification/model");
 
 function getAllUsers(req, res) {
@@ -135,10 +136,23 @@ async function getUserById(req, res) {
       });
     }
 
+    let transactions;
+
+    if (user?.role === "seller") {
+      transactions = await transactionModel.findById({ sellerId: userId });
+    }
+
+    if (user?.role === "buyer") {
+      transactions = await transactionModel.findById({ buyerId: userId });
+    }
+
     return res.json({
       status: 200,
       message: "User fetched successfully",
-      data: user,
+      data: {
+        user,
+        transactions,
+      },
     });
   } catch (err) {
     res.json({
