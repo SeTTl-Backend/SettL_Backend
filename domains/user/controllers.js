@@ -139,11 +139,11 @@ async function getUserById(req, res) {
     let transactions;
 
     if (user?.role === "seller") {
-      transactions = await transactionModel.findById({ sellerId: userId });
+      transactions = await transactionModel.find({ sellerId: userId });
     }
 
     if (user?.role === "buyer") {
-      transactions = await transactionModel.findById({ buyerId: userId });
+      transactions = await transactionModel.find({ buyerId: userId });
     }
 
     return res.json({
