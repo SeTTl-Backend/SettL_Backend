@@ -16,6 +16,7 @@ const TransactionSchema = Joi.object({
       .required(),
     setConditions: Joi.string().trim().required(),
     termsAndConditions: Joi.string().trim().required(),
+    dateDue: Joi.date().default(Date.now),
   }),
   redirectUrl: Joi.string().max(255).trim().required(),
   createdAt: Joi.date().default(Date.now),
@@ -40,6 +41,7 @@ const VerifyTransactionDetailsSchema = Joi.object({
       .trim()
       .required(),
     setConditions: Joi.string().trim().required(),
+    dateDue: Joi.date().default(Date.now),
     termsAndConditions: Joi.string().trim().required(),
   }),
   createdAt: Joi.date().default(Date.now),
