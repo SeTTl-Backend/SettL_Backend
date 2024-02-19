@@ -83,7 +83,7 @@ async function handleSendNotificationEmail(to, subject, html) {
   try {
     const mailOptions = {
       from: process.env.AUTH_EMAIL,
-      to: to,
+      to: Array.isArray(to) ? to.join(", ") : to,
       subject: subject,
       html: html,
     };
@@ -241,9 +241,36 @@ async function updateTransactionStatus(req, res) {
       });
     }
 
+    const sellerUser = userModel.findById(transaction?.sellerId);
+    const buyerUser = userModel.findById(transaction?.buyerId);
+
     await transactionModel.updateOne(
       { _id: transactionId },
       { status: newStatus }
+    );
+
+    const subject =
+      newStatus === "COMPLETED"
+        ? "Transaction completed"
+        : "Transaction Status Updated";
+
+    // send a mail
+    const recipients = [sellerUser?.email, buyerUser?.email];
+    updateTransactionSubject = subject;
+    html = `<p>Greetings</p>
+            <p>We would like to inform you that the status of the transaction has been updated. Below are the details:</p>
+            <ul>
+              <li><strong>Transaction Type:</strong> ${transaction?.formData?.transactionType}</li>
+              <li><strong>Amount:</strong> ${transaction?.formData?.amount}</li>
+              <li><strong>Delivery Address:</strong> ${transaction?.formData?.deliveryAddress}</li>
+              <li><strong>New Status:</strong> ${newStatus}</li>
+            </ul>
+            <p>Thank you for your participation. The transaction will proceed as planned.</p>`;
+
+    await handleSendNotificationEmail(
+      recipients,
+      updateTransactionSubject,
+      html
     );
 
     res.json({
