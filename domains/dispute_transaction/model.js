@@ -30,7 +30,7 @@ const DisputeTransactionSchema = new Schema({
 //Define a function to send reset password emails
 async function sendNotificationEmail(userId) {
   try {
-    const user = await User.findById(userId);
+    const user = await user.findById(userId);
     if (!user) {
       throw new Error("User not found");
     }
