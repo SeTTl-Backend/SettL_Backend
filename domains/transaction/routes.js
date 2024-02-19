@@ -5,6 +5,7 @@ const {
   createTransactionValidationMW,
   verifyTransactionMW,
   verifyTransactionDetailsValidationMW,
+  updateTransactionStatusValidationMW,
 } = require("./validators");
 const transactionController = require("./controllers");
 
@@ -24,6 +25,13 @@ transactionRouter.post(
   "/verify-transaction-details",
   verifyTransactionDetailsValidationMW,
   transactionController.verifyTransactionDetails
+);
+
+transactionRouter.post(
+  "/update-transaction-status",
+  updateTransactionStatusValidationMW,
+  VerifyTokenMW,
+  transactionController.updateTransactionStatus
 );
 
 module.exports = transactionRouter;

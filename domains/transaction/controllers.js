@@ -122,8 +122,6 @@ async function verifyTransaction(req, res) {
         });
       }
 
-      console.log("got here 2");
-
       if (action === "decline") {
         await transactionModel.updateOne(
           { _id: transactionId },
@@ -162,7 +160,7 @@ async function verifyTransaction(req, res) {
         }
       );
 
-      // PENDING, DECLINE, REFUNDED, VERIFIED, RECEIVED, COMPLETED transaction status
+      // PENDING, DECLINED, REFUNDED, VERIFIED, DISPATCHED,  RECEIVED, COMPLETED transaction status
 
       // send a mail
       approvedTransactionSubject = "Transaction Approved";
@@ -230,8 +228,36 @@ async function verifyTransactionDetails(req, res) {
   }
 }
 
+async function updateTransactionStatus(req, res) {
+  const { newStatus, transactionId } = req.body;
+
+  try {
+    const transaction = await transactionModel.findById(transactionId);
+
+    if (!transaction) {
+      return res.json({
+        status: 401,
+        message: "Transaction not found",
+      });
+    }
+
+    await transactionModel.updateOne(
+      { _id: transactionId },
+      { status: newStatus }
+    );
+
+    res.json({
+      message: "Transaction status updated successfully",
+      status: 200,
+    });
+  } catch (error) {
+    res.json({ status: 500, message: error.message || "An error occurred" });
+  }
+}
+
 module.exports = {
   createTransaction,
   verifyTransaction,
   verifyTransactionDetails,
+  updateTransactionStatus,
 };

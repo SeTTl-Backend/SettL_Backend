@@ -46,6 +46,13 @@ const VerifyTransactionDetailsSchema = Joi.object({
   lastUpdatedAt: Joi.date().default(Date.now),
 });
 
+const UpdateTransactionStatusSchema = Joi.object({
+  newStatus: Joi.string().trim().required(),
+  transactionId: Joi.string().trim().required(),
+  createdAt: Joi.date().default(Date.now),
+  lastUpdatedAt: Joi.date().default(Date.now),
+});
+
 async function createTransactionValidationMW(req, res, next) {
   const createTransactionPayLoad = req.body;
 
@@ -90,8 +97,25 @@ async function verifyTransactionDetailsValidationMW(req, res, next) {
   }
 }
 
+async function updateTransactionStatusValidationMW(req, res, next) {
+  const updateTransactionStatusPayLoad = req.body;
+
+  try {
+    await UpdateTransactionStatusSchema.validateAsync(
+      updateTransactionStatusPayLoad
+    );
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   createTransactionValidationMW,
   verifyTransactionMW,
   verifyTransactionDetailsValidationMW,
+  updateTransactionStatusValidationMW,
 };
