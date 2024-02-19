@@ -241,9 +241,11 @@ async function updateTransactionStatus(req, res) {
       });
     }
 
-    const sellerUser = userModel.findById(transaction?.sellerId);
-    const buyerUser = userModel.findById(transaction?.buyerId);
+    // Fetch seller and buyer users
+    const sellerUser = await userModel.findById(transaction?.sellerId);
+    const buyerUser = await userModel.findById(transaction?.buyerId);
 
+    // Update transaction status
     await transactionModel.updateOne(
       { _id: transactionId },
       { status: newStatus }
@@ -254,9 +256,7 @@ async function updateTransactionStatus(req, res) {
         ? "Transaction completed"
         : "Transaction Status Updated";
 
-    // send a mail
-    const recipients = [sellerUser?.email, buyerUser?.email];
-    updateTransactionSubject = subject;
+    // Construct email content
     html = `<p>Greetings</p>
             <p>We would like to inform you that the status of the transaction has been updated. Below are the details:</p>
             <ul>
@@ -267,11 +267,11 @@ async function updateTransactionStatus(req, res) {
             </ul>
             <p>Thank you for your participation. The transaction will proceed as planned.</p>`;
 
-    await handleSendNotificationEmail(
-      recipients,
-      updateTransactionSubject,
-      html
-    );
+    // Send email to both seller and buyer
+    const to = [sellerUser?.email, buyerUser?.email];
+    const updateTransactionSubject = subject;
+
+    await handleSendNotificationEmail(to, updateTransactionSubject, html);
 
     res.json({
       message: "Transaction status updated successfully",

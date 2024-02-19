@@ -30,7 +30,6 @@ transactionRouter.post(
 transactionRouter.post(
   "/update-transaction-status",
   updateTransactionStatusValidationMW,
-  VerifyTokenMW,
   transactionController.updateTransactionStatus
 );
 
