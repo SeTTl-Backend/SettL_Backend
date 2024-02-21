@@ -4,6 +4,7 @@ const { VerifyTokenMW } = require("../../auth/tokenAuth");
 const {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
+  UpdateUserProfileValidationMW,
 } = require("./validators");
 const userController = require("./controllers");
 
@@ -22,6 +23,11 @@ userRouter.post(
   "/signin",
   AuthenticateUserValidationMW,
   userController.authenticateUser
+);
+userRouter.post(
+  "/update-user-profile",
+  UpdateUserProfileValidationMW,
+  userController.updateUserProfile
 );
 
 module.exports = userRouter;

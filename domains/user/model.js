@@ -36,6 +36,39 @@ const UserSchema = new Schema({
     type: String,
     required: false,
   },
+  phoneNumber: {
+    type: String,
+  },
+  profilePicture: {
+    type: String,
+  },
+  bvn: {
+    type: String,
+  },
+  identificationDetails: {
+    idType: String,
+    iDNumber: String,
+  },
+  headShot: { type: String },
+  contactDetails: {
+    houseAddress: { type: String },
+    nearestLandmark: { type: String },
+    officeAddress: { type: String },
+    deliveryAddress: { type: String },
+    postalCode: { type: String },
+    proofOfAddress: { type: String },
+  },
+  accountDetails: {
+    bankName: { type: String },
+    accountNumber: { type: String },
+    accountName: { type: String },
+  },
+  nextOfKin: {
+    fullName: { type: String },
+    relationship: { type: String },
+    contactNumber: { type: String },
+  },
+  isVerified: { type: Boolean },
   createAt: {
     type: Date,
     default: Date.now,

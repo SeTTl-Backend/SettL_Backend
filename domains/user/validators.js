@@ -21,6 +21,11 @@ const AuthenticateUserSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const UpdateUserProfileSchema = Joi.object({
+  phoneNumber: Joi.string().trim().required(),
+  profilePicture: Joi.string().required(),
+});
+
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 
@@ -49,7 +54,22 @@ async function AuthenticateUserValidationMW(req, res, next) {
   }
 }
 
+async function UpdateUserProfileValidationMW(req, res, next) {
+  const userPayLoad = req.body;
+
+  try {
+    await UpdateUserProfileSchema.validateAsync(userPayLoad);
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
+  UpdateUserProfileValidationMW,
 };

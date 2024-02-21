@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const hashedData = require("../../utils/hashedData");
 const verifyHashedData = require("../../utils/verifyHashedData");
+const multerConfig = require("../../utils/multerConfig");
 
 // Models
 const userModel = require("./model");
@@ -162,9 +163,46 @@ async function getUserById(req, res) {
   }
 }
 
+async function updateUserProfile(req, res) {
+  const { userId } = req.body;
+  try {
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: "User not found",
+      });
+    }
+
+    upload.single("profilePicture")(req, res, async function (err) {
+      if (err) {
+        return res.json({ status: 400, message: err.message });
+      }
+
+      const { phoneNumber } = req.body;
+      const profilePicture = req.file ? req.file.path : undefined;
+
+      const updateFields = {};
+      if (phoneNumber) updateFields.phoneNumber = phoneNumber;
+      if (profilePicture) updateFields.profilePicture = profilePicture;
+
+      await userModel.findByIdAndUpdate(userId, updateFields);
+
+      res.json({ status: 200, message: "User profile updated successfully" });
+    });
+  } catch (err) {
+    res.json({
+      status: 500,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   getAllUsers,
   registerUser,
   authenticateUser,
   getUserById,
+  updateUserProfile,
 };
