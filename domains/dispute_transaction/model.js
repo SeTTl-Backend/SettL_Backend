@@ -2,6 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const sendEmail = require("../../utils/sendEmail");
 const Schema = mongoose.Schema;
+const userModel = require("../user/model");
 
 const DisputeTransactionSchema = new Schema({
   userId: {
@@ -28,9 +29,9 @@ const DisputeTransactionSchema = new Schema({
 });
 
 //Define a function to send reset password emails
-async function sendNotificationEmail(userId) {
+async function sendNotificationEmail(userId, transactionId) {
   try {
-    const user = await user.findById(userId);
+    const user = await userModel.findById(userId);
     if (!user) {
       throw new Error("User not found");
     }
@@ -40,7 +41,7 @@ async function sendNotificationEmail(userId) {
       to: user.email,
       subject: "Dispute Transaction",
       html: `<p>Thank you for Disputing this transaction!</p>
-         <p>We have received your dispute with id ${this.transactionId} and will resolve the dispute as soon as possible.</p>
+         <p>We have received your dispute with id ${transactionId} and will resolve the dispute as soon as possible.</p>
          <p>If you have any other issues or questions, feel free to reach out to us directly.</p>
          <p>Best regards,<br/>Your Support Team</p>`,
     };
@@ -56,7 +57,7 @@ DisputeTransactionSchema.pre("save", async function (next) {
   console.log("New document saved to the database");
   // Only send an email when a new document has been created.
   if (this.isNew) {
-    await sendNotificationEmail(this.userId);
+    await sendNotificationEmail(this.userId, this.transactionId);
   }
   next();
 });
