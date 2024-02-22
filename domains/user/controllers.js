@@ -182,6 +182,7 @@ async function updateUserProfile(req, res) {
 
       const { firstName, lastName, phoneNumber } = req.body;
       const profilePicture = req.file ? req.file.path : undefined;
+      console.log(req.file, req, "answer is here");
 
       // Update the user document
       if (firstName) user.firstName = firstName;
