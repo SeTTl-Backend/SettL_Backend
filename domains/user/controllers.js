@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const hashedData = require("../../utils/hashedData");
 const verifyHashedData = require("../../utils/verifyHashedData");
-const upload = require("../../utils/multerConfig");
+// const upload = require("../../utils/multerConfig");
 
 // Models
 const userModel = require("./model");
@@ -175,27 +175,27 @@ async function updateUserProfile(req, res) {
       });
     }
 
-    upload.single("profilePicture")(req, res, async function (err) {
-      if (err) {
-        return res.json({ status: 400, message: err.message });
-      }
+    // upload.single("profilePicture")(req, res, async function (err) {
+    //   if (err) {
+    //     return res.json({ status: 400, message: err.message });
+    //   }
 
-      const { firstName, lastName, phoneNumber } = req.body;
-      const profilePicture = req.file ? req.file.path : undefined;
-      console.log(req.file.path, "answer is here");
+    const { firstName, lastName, phoneNumber, profilePicture } = req.body;
+    // const profilePicture = req.file ? req.file.path : undefined;
+    // console.log(req.file.path, "answer is here");
 
-      console.log(req.file, "holla");
+    // console.log(req.file, "holla");
 
-      // Update the user document
-      if (firstName) user.firstName = firstName;
-      if (lastName) user.lastName = lastName;
-      if (phoneNumber) user.phoneNumber = phoneNumber;
-      if (profilePicture) user.profilePicture = profilePicture;
+    // Update the user document
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (profilePicture) user.profilePicture = profilePicture;
 
-      await user.save(); // Save the updated user document
+    await user.save(); // Save the updated user document
 
-      res.json({ status: 200, message: "User profile updated successfully" });
-    });
+    res.json({ status: 200, message: "User profile updated successfully" });
+    // });
   } catch (err) {
     res.json({
       status: 500,
