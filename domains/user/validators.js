@@ -22,9 +22,13 @@ const AuthenticateUserSchema = Joi.object({
 });
 
 const UpdateUserProfileSchema = Joi.object({
+  firstName: Joi.string().max(255).trim().required(),
+  lastName: Joi.string().max(255).required().trim(),
+  userId: Joi.string().required().trim(),
   phoneNumber: Joi.string().trim().required(),
   profilePicture: Joi.string().uri().required(),
 });
+
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 

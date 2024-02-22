@@ -165,6 +165,7 @@ async function getUserById(req, res) {
 
 async function updateUserProfile(req, res) {
   const { userId } = req.body;
+  console.log(userId, "id");
   try {
     const user = await userModel.findById(userId);
 
@@ -189,7 +190,7 @@ async function updateUserProfile(req, res) {
       if (phoneNumber) updateFields.phoneNumber = phoneNumber;
       if (profilePicture) updateFields.profilePicture = profilePicture;
 
-      await userModel.findByIdAndUpdate(userId, updateFields);
+      await userModel.updateOne({ _id: userId }, updateFields);
 
       res.json({ status: 200, message: "User profile updated successfully" });
     });
