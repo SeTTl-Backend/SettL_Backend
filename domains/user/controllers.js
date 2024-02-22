@@ -166,7 +166,7 @@ async function getUserById(req, res) {
 async function updateUserProfile(req, res) {
   const { userId } = req.body;
   try {
-    const user = await userModel.findById(userId);
+    let user = await userModel.findById(userId);
 
     if (!user) {
       return res.json({
@@ -183,13 +183,13 @@ async function updateUserProfile(req, res) {
       const { firstName, lastName, phoneNumber } = req.body;
       const profilePicture = req.file ? req.file.path : undefined;
 
-      const updateFields = {};
-      if (firstName) updateFields.firstName = firstName;
-      if (lastName) updateFields.lastName = lastName;
-      if (phoneNumber) updateFields.phoneNumber = phoneNumber;
-      if (profilePicture) updateFields.profilePicture = profilePicture;
+      // Update the user document
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+      if (phoneNumber) user.phoneNumber = phoneNumber;
+      if (profilePicture) user.profilePicture = profilePicture;
 
-      await userModel.updateOne({ _id: userId }, updateFields);
+      await user.save(); // Save the updated user document
 
       res.json({ status: 200, message: "User profile updated successfully" });
     });

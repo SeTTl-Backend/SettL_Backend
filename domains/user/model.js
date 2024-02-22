@@ -46,8 +46,8 @@ const UserSchema = new Schema({
     type: String,
   },
   identificationDetails: {
-    idType: String,
-    iDNumber: String,
+    idType: { type: String },
+    iDNumber: { type: String },
   },
   headShot: { type: String },
   contactDetails: {
