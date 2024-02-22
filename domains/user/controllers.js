@@ -180,10 +180,12 @@ async function updateUserProfile(req, res) {
         return res.json({ status: 400, message: err.message });
       }
 
-      const { phoneNumber } = req.body;
+      const { firstName, lastName, phoneNumber } = req.body;
       const profilePicture = req.file ? req.file.path : undefined;
 
       const updateFields = {};
+      if (firstName) updateFields.firstName = firstName;
+      if (lastName) updateFields.lastName = lastName;
       if (phoneNumber) updateFields.phoneNumber = phoneNumber;
       if (profilePicture) updateFields.profilePicture = profilePicture;
 
