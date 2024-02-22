@@ -32,7 +32,7 @@ userRouter.patch(
 );
 
 userRouter.patch(
-  "/update-user-profile",
+  "/update-user-account-details",
   UpdateUserAccountDetailsValidationMW,
   userController.updateUserAccountDetails
 );
