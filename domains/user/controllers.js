@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const hashedData = require("../../utils/hashedData");
 const verifyHashedData = require("../../utils/verifyHashedData");
-const multerConfig = require("../../utils/multerConfig");
+const upload = require("../../utils/multerConfig");
 
 // Models
 const userModel = require("./model");
@@ -165,7 +165,6 @@ async function getUserById(req, res) {
 
 async function updateUserProfile(req, res) {
   const { userId } = req.body;
-  console.log(userId, "id");
   try {
     const user = await userModel.findById(userId);
 
