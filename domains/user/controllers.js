@@ -175,16 +175,7 @@ async function updateUserProfile(req, res) {
       });
     }
 
-    // upload.single("profilePicture")(req, res, async function (err) {
-    //   if (err) {
-    //     return res.json({ status: 400, message: err.message });
-    //   }
-
     const { firstName, lastName, phoneNumber, profilePicture } = req.body;
-    // const profilePicture = req.file ? req.file.path : undefined;
-    // console.log(req.file.path, "answer is here");
-
-    // console.log(req.file, "holla");
 
     // Update the user document
     if (firstName) user.firstName = firstName;
@@ -195,7 +186,6 @@ async function updateUserProfile(req, res) {
     await user.save(); // Save the updated user document
 
     res.json({ status: 200, message: "User profile updated successfully" });
-    // });
   } catch (err) {
     res.json({
       status: 500,
@@ -242,6 +232,43 @@ async function updateUserAccountDetails(req, res) {
   }
 }
 
+async function updateUserContactDetails(req, res) {
+  const {
+    userId,
+    homeAddress,
+    nearestLandmark,
+    officeAddress,
+    postalCode,
+    proofOfAddress,
+  } = req.body;
+  try {
+    let user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: "User not found",
+      });
+    }
+
+    // Update the user document
+    if (homeAddress) user.contactDetails.homeAddress = homeAddress;
+    if (nearestLandmark) user.contactDetails.nearestLandmark = nearestLandmark;
+    if (officeAddress) user.contactDetails.officeAddress = officeAddress;
+    if (postalCode) user.contactDetails.postalCode = postalCode;
+    if (proofOfAddress) user.contactDetails.proofOfAddress = proofOfAddress;
+
+    await user.save(); // Save the updated user document
+
+    res.json({ status: 200, message: "User profile updated successfully" });
+  } catch (err) {
+    res.json({
+      status: 500,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   getAllUsers,
   registerUser,
@@ -249,4 +276,5 @@ module.exports = {
   getUserById,
   updateUserProfile,
   updateUserAccountDetails,
+  updateUserContactDetails,
 };

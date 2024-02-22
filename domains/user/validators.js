@@ -37,6 +37,15 @@ const UpdateUserAccountDetailsSchema = Joi.object({
   userId: Joi.string().required().trim(),
 });
 
+const UpdateUserContactDetailsSchema = Joi.object({
+  homeAddress: Joi.string().max(255).trim().required(),
+  nearestLandmark: Joi.string().max(255).required().trim(),
+  officeAddress: Joi.string().required().trim(),
+  postalCode: Joi.string().required().trim(),
+  proofOfAddress: Joi.string().uri().required(),
+  userId: Joi.string().required().trim(),
+});
+
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 
@@ -93,9 +102,24 @@ async function UpdateUserAccountDetailsValidationMW(req, res, next) {
   }
 }
 
+async function UpdateUserContactDetailsValidationMW(req, res, next) {
+  const userPayLoad = req.body;
+
+  try {
+    await UpdateUserContactDetailsSchema.validateAsync(userPayLoad);
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
   UpdateUserProfileValidationMW,
   UpdateUserAccountDetailsValidationMW,
+  UpdateUserContactDetailsValidationMW,
 };
