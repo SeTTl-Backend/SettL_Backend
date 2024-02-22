@@ -5,6 +5,7 @@ const {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
   UpdateUserProfileValidationMW,
+  UpdateUserAccountDetailsValidationMW,
 } = require("./validators");
 const userController = require("./controllers");
 
@@ -24,10 +25,16 @@ userRouter.post(
   AuthenticateUserValidationMW,
   userController.authenticateUser
 );
-userRouter.post(
+userRouter.patch(
   "/update-user-profile",
   UpdateUserProfileValidationMW,
   userController.updateUserProfile
+);
+
+userRouter.patch(
+  "/update-user-profile",
+  UpdateUserAccountDetailsValidationMW,
+  userController.updateUserAccountDetails
 );
 
 module.exports = userRouter;

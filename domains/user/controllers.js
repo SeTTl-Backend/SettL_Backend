@@ -204,10 +204,51 @@ async function updateUserProfile(req, res) {
   }
 }
 
+async function updateUserAccountDetails(req, res) {
+  const { userId } = req.body;
+  try {
+    let user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: "User not found",
+      });
+    }
+
+    const hashedPassword = user.password;
+    const passwordMatch = await verifyHashedData(password, hashedPassword);
+
+    if (!passwordMatch) {
+      return res.json({
+        message: "Invalid password entered",
+        status: 401,
+      });
+    }
+
+    const { accountName, bankName, accountNumber, password } = req.body;
+
+    // Update the user document
+    if (accountName) user.accountDetails.accountName = accountName;
+    if (bankName) user.accountDetails.bankName = bankName;
+    if (accountNumber) user.accountDetails.accountNumber = accountNumber;
+
+    await user.save(); // Save the updated user document
+
+    res.json({ status: 200, message: "User profile updated successfully" });
+  } catch (err) {
+    res.json({
+      status: 500,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   getAllUsers,
   registerUser,
   authenticateUser,
   getUserById,
   updateUserProfile,
+  updateUserAccountDetails,
 };

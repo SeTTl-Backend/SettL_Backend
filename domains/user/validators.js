@@ -29,6 +29,14 @@ const UpdateUserProfileSchema = Joi.object({
   profilePicture: Joi.string().uri().required(),
 });
 
+const UpdateUserAccountDetailsSchema = Joi.object({
+  accountName: Joi.string().max(255).trim().required(),
+  bankName: Joi.string().max(255).required().trim(),
+  accountNumber: Joi.string().required().trim(),
+  password: Joi.string().trim().required(),
+  userId: Joi.string().required().trim(),
+});
+
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 
@@ -71,8 +79,23 @@ async function UpdateUserProfileValidationMW(req, res, next) {
   }
 }
 
+async function UpdateUserAccountDetailsValidationMW(req, res, next) {
+  const userPayLoad = req.body;
+
+  try {
+    await UpdateUserAccountDetailsSchema.validateAsync(userPayLoad);
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
   UpdateUserProfileValidationMW,
+  UpdateUserAccountDetailsValidationMW,
 };
