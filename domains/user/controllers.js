@@ -205,7 +205,7 @@ async function updateUserProfile(req, res) {
 }
 
 async function updateUserAccountDetails(req, res) {
-  const { userId } = req.body;
+  const { userId, accountName, bankName, accountNumber, password } = req.body;
   try {
     let user = await userModel.findById(userId);
 
@@ -225,8 +225,6 @@ async function updateUserAccountDetails(req, res) {
         status: 401,
       });
     }
-
-    const { accountName, bankName, accountNumber, password } = req.body;
 
     // Update the user document
     if (accountName) user.accountDetails.accountName = accountName;
