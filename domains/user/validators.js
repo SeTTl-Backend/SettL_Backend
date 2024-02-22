@@ -23,9 +23,8 @@ const AuthenticateUserSchema = Joi.object({
 
 const UpdateUserProfileSchema = Joi.object({
   phoneNumber: Joi.string().trim().required(),
-  profilePicture: Joi.string().required(),
+  profilePicture: Joi.string().uri().required(),
 });
-
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 
