@@ -46,6 +46,18 @@ const UpdateUserContactDetailsSchema = Joi.object({
   userId: Joi.string().required().trim(),
 });
 
+const UpdateUserKycDetailsSchema = Joi.object({
+  headShot: Joi.string().uri().required(),
+  idType: Joi.string().max(255).trim().required(),
+  idNumber: Joi.string().max(255).required().trim(),
+  idCard: Joi.string().uri().required(),
+  nextOfKinFullName: Joi.string().required().trim(),
+  nextOfKinRelationship: Joi.string().required().trim(),
+  nextOfKinContactNumber: Joi.string().required().trim(),
+  bvn: Joi.string().required().trim(),
+  userId: Joi.string().required().trim(),
+});
+
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 
@@ -116,10 +128,25 @@ async function UpdateUserContactDetailsValidationMW(req, res, next) {
   }
 }
 
+async function UpdateUserKycDetailsValidationMW(req, res, next) {
+  const userPayLoad = req.body;
+
+  try {
+    await UpdateUserKycDetailsSchema.validateAsync(userPayLoad);
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
   UpdateUserProfileValidationMW,
   UpdateUserAccountDetailsValidationMW,
   UpdateUserContactDetailsValidationMW,
+  UpdateUserKycDetailsValidationMW,
 };

@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const hashedData = require("../../utils/hashedData");
 const verifyHashedData = require("../../utils/verifyHashedData");
-// const upload = require("../../utils/multerConfig");
 
 // Models
 const userModel = require("./model");
@@ -269,6 +268,50 @@ async function updateUserContactDetails(req, res) {
   }
 }
 
+async function updateUserKycDetails(req, res) {
+  const {
+    headShot,
+    idType,
+    idNumber,
+    idCard,
+    nextOfKinFullName,
+    nextOfKinRelationship,
+    nextOfKinContactNumber,
+    bvn,
+    userId,
+  } = req.body;
+  try {
+    let user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: "User not found",
+      });
+    }
+
+    // Update the user document
+    if (headShot) user.headShot = headShot;
+    if (idType) user.identificationDetails.idType = idType;
+    if (idNumber) user.identificationDetails.idNumber = idNumber;
+    if (idCard) user.identificationDetails.idCard = idCard;
+    if (nextOfKinFullName) user.nextOfKin.fullName = nextOfKinFullName;
+    if (nextOfKinRelationship)
+      user.nextOfKin.relationship = nextOfKinRelationship;
+    if (nextOfKinContactNumber)
+      user.nextOfKin.contactNumber = nextOfKinContactNumber;
+    if (bvn) user.bvn = bvn;
+
+    await user.save(); // Save the updated user document
+
+    res.json({ status: 200, message: "User profile updated successfully" });
+  } catch (err) {
+    res.json({
+      status: 500,
+      message: err.message,
+    });
+  }
+}
 module.exports = {
   getAllUsers,
   registerUser,
@@ -277,4 +320,5 @@ module.exports = {
   updateUserProfile,
   updateUserAccountDetails,
   updateUserContactDetails,
+  updateUserKycDetails,
 };
