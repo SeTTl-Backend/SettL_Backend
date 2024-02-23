@@ -353,23 +353,14 @@ async function changePassword(req, res) {
   }
 }
 
-headShot,
-  idType,
-  idNumber,
-  idCard,
-  nextOfKinFullName,
-  nextOfKinRelationship,
-  nextOfKinContactNumber,
-  bvn,
-  userId,
-  (module.exports = {
-    getAllUsers,
-    registerUser,
-    authenticateUser,
-    getUserById,
-    updateUserProfile,
-    updateUserAccountDetails,
-    updateUserContactDetails,
-    updateUserKycDetails,
-    changePassword,
-  });
+module.exports = {
+  getAllUsers,
+  registerUser,
+  authenticateUser,
+  getUserById,
+  updateUserProfile,
+  updateUserAccountDetails,
+  updateUserContactDetails,
+  updateUserKycDetails,
+  changePassword,
+};
