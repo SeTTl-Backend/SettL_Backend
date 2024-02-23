@@ -312,13 +312,23 @@ async function updateUserKycDetails(req, res) {
     });
   }
 }
-module.exports = {
-  getAllUsers,
-  registerUser,
-  authenticateUser,
-  getUserById,
-  updateUserProfile,
-  updateUserAccountDetails,
-  updateUserContactDetails,
-  updateUserKycDetails,
-};
+
+headShot,
+  idType,
+  idNumber,
+  idCard,
+  nextOfKinFullName,
+  nextOfKinRelationship,
+  nextOfKinContactNumber,
+  bvn,
+  userId,
+  (module.exports = {
+    getAllUsers,
+    registerUser,
+    authenticateUser,
+    getUserById,
+    updateUserProfile,
+    updateUserAccountDetails,
+    updateUserContactDetails,
+    updateUserKycDetails,
+  });
