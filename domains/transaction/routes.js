@@ -27,7 +27,7 @@ transactionRouter.post(
   transactionController.verifyTransactionDetails
 );
 
-transactionRouter.post(
+transactionRouter.patch(
   "/update-transaction-status",
   updateTransactionStatusValidationMW,
   transactionController.updateTransactionStatus
