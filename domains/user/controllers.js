@@ -313,6 +313,46 @@ async function updateUserKycDetails(req, res) {
   }
 }
 
+async function changePassword(req, res) {
+  const { userId, newPassword, oldPassword } = req.body;
+  try {
+    let user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: "User not found",
+      });
+    }
+
+    const hashedPassword = user?.password;
+
+    const resetPasswordMatch = await verifyHashedData(
+      oldPassword,
+      hashedPassword
+    );
+
+    if (!resetPasswordMatch) {
+      return res.json({
+        message: "Something went wrong",
+        status: 401,
+      });
+    }
+    const hashedNewPassword = await hashedData(newPassword);
+    await userModel.updateOne({ _id: userId }, { password: hashedNewPassword });
+
+    res.json({
+      message: "Password updated successfully",
+      status: 200,
+    });
+  } catch (err) {
+    res.json({
+      status: 500,
+      message: err.message,
+    });
+  }
+}
+
 headShot,
   idType,
   idNumber,
@@ -331,4 +371,5 @@ headShot,
     updateUserAccountDetails,
     updateUserContactDetails,
     updateUserKycDetails,
+    changePassword,
   });

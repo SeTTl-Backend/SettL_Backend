@@ -8,6 +8,7 @@ const {
   UpdateUserAccountDetailsValidationMW,
   UpdateUserContactDetailsValidationMW,
   UpdateUserKycDetailsValidationMW,
+  ChangePasswordValidationMW,
 } = require("./validators");
 const userController = require("./controllers");
 
@@ -49,6 +50,12 @@ userRouter.patch(
   "/update-user-kyc-details",
   UpdateUserKycDetailsValidationMW,
   userController.updateUserKycDetails
+);
+
+userRouter.patch(
+  "/change-password",
+  ChangePasswordValidationMW,
+  userController.changePassword
 );
 
 module.exports = userRouter;

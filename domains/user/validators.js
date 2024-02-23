@@ -58,6 +58,22 @@ const UpdateUserKycDetailsSchema = Joi.object({
   userId: Joi.string().required().trim(),
 });
 
+const ChangePasswordSchema = Joi.object({
+  userId: Joi.string().required().trim(),
+  oldPassword: Joi.string()
+    .min(8)
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    )
+    .required(),
+  newPassword: Joi.string()
+    .min(8)
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    )
+    .required(),
+});
+
 async function RegisterUserValidationMW(req, res, next) {
   const userPayLoad = req.body;
 
@@ -142,6 +158,20 @@ async function UpdateUserKycDetailsValidationMW(req, res, next) {
   }
 }
 
+async function ChangePasswordValidationMW(req, res, next) {
+  const userPayLoad = req.body;
+
+  try {
+    await ChangePasswordSchema.validateAsync(userPayLoad);
+    next();
+  } catch (error) {
+    next({
+      message: error.details[0].message,
+      status: 400,
+    });
+  }
+}
+
 module.exports = {
   RegisterUserValidationMW,
   AuthenticateUserValidationMW,
@@ -149,4 +179,5 @@ module.exports = {
   UpdateUserAccountDetailsValidationMW,
   UpdateUserContactDetailsValidationMW,
   UpdateUserKycDetailsValidationMW,
+  ChangePasswordValidationMW,
 };
