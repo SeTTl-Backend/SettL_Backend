@@ -51,7 +51,7 @@ const UserSchema = new Schema({
   },
   headShot: { type: String },
   contactDetails: {
-    houseAddress: { type: String },
+    homeAddress: { type: String },
     nearestLandmark: { type: String },
     officeAddress: { type: String },
     deliveryAddress: { type: String },
